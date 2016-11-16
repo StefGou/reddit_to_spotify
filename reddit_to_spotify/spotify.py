@@ -1,55 +1,47 @@
 import time
 import spotipy
-import spotipy.util as util
-from reddit_to_spotify.settings import SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SPOTIPY_CLIENT_ID
 
 
-def create_playlist(username):
+def create_playlist(spotify_instance, username):
     """
     :param username: string, Spotify username
+    :param spotify_instance: object, instance of spotipy.Spotify()
     :return: playlist id OR False if it fails
     """
-    token = util.prompt_for_user_token(username, client_id=SPOTIPY_CLIENT_ID,
-                                       client_secret=SPOTIPY_CLIENT_SECRET, redirect_uri=SPOTIPY_REDIRECT_URI)
 
-    if token:
+    if spotify_instance:
         playlist_name = "Reddit's /r/Music songs of {}".format(time.strftime('%Y-%m-%d'))
 
-        sp = spotipy.Spotify(auth=token)
-        sp.trace = False
-        playlist = sp.user_playlist_create(username, playlist_name, public=True)
+        print("Creating playlist '{}'...".format(playlist_name))
+
+        playlist = spotify_instance.user_playlist_create(username, playlist_name, public=True)
 
         return playlist['id']
 
     else:
-        print("Can't get token for", username)
+        print("Error creating the playlist")
 
         return False
 
 
-def add_songs_to_playlist(username, playlist_id, track_ids):
+def add_songs_to_playlist(spotify_instance, username, playlist_id, track_ids):
     """
+    :param spotify_instance: object, instance of spotipy.Spotify()
     :param username: string, Spotify username
     :param playlist_id: string, alpha-digits id
     :param track_ids: list, contains strings --> all of the tracks' id's
     :return: True if succes, False if error
     """
 
-    scope = 'playlist-modify-public'
+    if spotify_instance:
+        print("Adding songs to playlist...")
 
-    token = util.prompt_for_user_token(username, scope=scope, client_id=SPOTIPY_CLIENT_ID,
-                                       client_secret=SPOTIPY_CLIENT_SECRET, redirect_uri=SPOTIPY_REDIRECT_URI)
-
-    if token:
-        sp = spotipy.Spotify(auth=token)
-        sp.trace = False
-        results = sp.user_playlist_add_tracks(username, playlist_id, track_ids)
-        print(results)
+        results = spotify_instance.user_playlist_add_tracks(username, playlist_id, track_ids)
 
         return True
 
     else:
-        print("Can't get token for", username)
+        print("Error adding songs to playlist")
 
         return False
 
