@@ -1,14 +1,22 @@
 from reddit_to_spotify.reddit import get_top_20_songs
-from reddit_to_spotify.spotify import add_songs_to_playlist, get_song_id
-
-username = "11158057035"  # for testing
-playlist_id = '5nTJOjNW9WuC9U0TNnsG5x'  # already created playlist for testing
+from reddit_to_spotify.spotify import add_songs_to_playlist, get_song_id, create_playlist
 
 # get Spotify username
+#   username = "11158057035"  # for testing
+print("What is your Spotify username?")
+print("############################################################################################################")
+print("# To find your username, go to https://play.spotify.com/collection, the page will redirect to another one. #")
+print("# Look at the URL, you username is just after the '/user/' part.                                           #")
+print("# Note that your username can be numbers if you registered via Facebook.                                   #")
+print("# e.g. https://play.spotify.com/user/your_user_name_or_numbers/playlist/abc123                             #")
+print("############################################################################################################")
+print()
+username = input("Enter your Spotify username: ")
+print()
 
-# create playlist with today's date as name e.g. "Reddit's /r/Music songs of 16-11-15"
-
-# get playlist id
+# create playlist with today's date in the name e.g. "Reddit's /r/Music songs of 2016-11-15" -- DONE : create_playlist()
+playlist_id = create_playlist(username)
+# get playlist id -- DONE : create_playlist returns the id
 
 # get top 20 songs on Reddit/r/Music -- DONE : get_top_20_songs()
 
@@ -22,7 +30,7 @@ for song in get_top_20_songs():
         songs.append(song_id)
 
 # insert list of songs in playlist -- DONE : add_songs_to_playlist()
-print(songs)
-# add_songs_to_playlist(username, playlist_id, songs)
+# print(songs)
+add_songs_to_playlist(username, playlist_id, songs)
 
 # success or error
