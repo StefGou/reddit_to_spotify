@@ -1,10 +1,10 @@
-from reddit_to_spotify.reddit import get_top_20_songs
-from reddit_to_spotify.spotify import add_songs_to_playlist, get_song_id, create_playlist
+from reddit import get_top_20_songs
+from spotify import add_songs_to_playlist, get_song_id, create_playlist
 
 import spotipy
 import spotipy.util as util
 
-from reddit_to_spotify.settings import SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SPOTIPY_CLIENT_ID
+from settings import SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SPOTIPY_CLIENT_ID
 
 # get Spotify username
 #   username = "11158057035"  # for testing

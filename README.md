@@ -8,7 +8,8 @@ Takes the top 20 songs submitted in Reddit's 'r/Music' subreddit (using 'music s
 * Input your Spotify username
 * That's it!
 
-### Finding your Spotify username
+#
+#### Finding your Spotify username
 
 Finding your Spotify username can be tricky.
 A quick way to find it is to:
