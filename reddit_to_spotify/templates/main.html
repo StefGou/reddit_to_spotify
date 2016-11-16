@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Reddit to Spotify</title>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+          {% for message in messages %}
+             {{ message }}
+          {% endfor %}
+       {% endif %}
+    {% endwith %}
+
+    <form action="" method="post">
+        <input name="username">
+        <input type="submit">
+    </form>
+
+    {% if username %}
+        Your username is : {{ username }}
+    {% endif %}
+</body>
+</html>
