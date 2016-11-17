@@ -4,7 +4,6 @@ from spotipy import oauth2
 import spotipy
 
 
-
 def create_playlist(spotify_instance, username):
     """
     :param username: string, Spotify username
@@ -58,8 +57,6 @@ def get_song_id(song):
     # split at "[" to keeps only band name and song title
     song = song.title.split("[")[0].strip()
 
-    print('Getting Spotify ID for: {}...'.format(song))
-
     # split the band name and the song title
     song = song.split(" - ")
 
@@ -72,5 +69,4 @@ def get_song_id(song):
         return song_id
 
     except:
-        print('*** Song not found. Skipping...')
         return 'None:{}'.format(" - ".join(song))

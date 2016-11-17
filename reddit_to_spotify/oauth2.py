@@ -6,12 +6,12 @@ import json
 import time
 import sys
 
-
 try:
     import urllib.request, urllib.error
     import urllib.parse as urllibparse
 except ImportError:
     import urllib as urllibparse
+
 
 class SpotifyOauthError(Exception):
     pass
@@ -26,7 +26,7 @@ class SpotifyOAuth(object):
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
 
     def __init__(self, client_id, client_secret, redirect_uri,
-            state=None, scope=None, cache_path=None):
+                 state=None, scope=None, cache_path=None):
         '''
             Creates a SpotifyOAuth object
 
@@ -86,7 +86,6 @@ class SpotifyOAuth(object):
                 self._warn("couldn't write token cache to " + self.cache_path)
                 pass
 
-
     def _is_token_expired(self, token_info):
         now = int(time.time())
         return token_info['expires_at'] < now
@@ -133,15 +132,15 @@ class SpotifyOAuth(object):
         if self.state:
             payload['state'] = self.state
 
-        if sys.version_info[0] >= 3: # Python 3
+        if sys.version_info[0] >= 3:  # Python 3
             auth_header = base64.b64encode(str(self.client_id + ':' + self.client_secret).encode())
             headers = {'Authorization': 'Basic %s' % auth_header.decode()}
-        else: # Python 2
+        else:  # Python 2
             auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
             headers = {'Authorization': 'Basic %s' % auth_header}
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-            headers=headers, verify=True)
+                                 headers=headers, verify=True)
         if response.status_code is not 200:
             raise SpotifyOauthError(response.reason)
         token_info = response.json()
@@ -158,24 +157,24 @@ class SpotifyOAuth(object):
             return None
 
     def _refresh_access_token(self, refresh_token):
-        payload = { 'refresh_token': refresh_token,
+        payload = {'refresh_token': refresh_token,
                    'grant_type': 'refresh_token'}
 
-        if sys.version_info[0] >= 3: # Python 3
+        if sys.version_info[0] >= 3:  # Python 3
             auth_header = base64.b64encode(str(self.client_id + ':' + self.client_secret).encode())
             headers = {'Authorization': 'Basic %s' % auth_header.decode()}
-        else: # Python 2
+        else:  # Python 2
             auth_header = base64.b64encode(self.client_id + ':' + self.client_secret)
             headers = {'Authorization': 'Basic %s' % auth_header}
 
         response = requests.post(self.OAUTH_TOKEN_URL, data=payload,
-            headers=headers)
+                                 headers=headers)
         if response.status_code != 200:
             if False:  # debugging code
                 print('headers', headers)
                 print('request', response.url)
             self._warn("couldn't refresh token: code:%d reason:%s" \
-                % (response.status_code, response.reason))
+                       % (response.status_code, response.reason))
             return None
         token_info = response.json()
         token_info = self._add_custom_values_to_token_info(token_info)

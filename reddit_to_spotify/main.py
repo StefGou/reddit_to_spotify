@@ -1,17 +1,16 @@
 from reddit import get_top_20_songs
 from spotify import add_songs_to_playlist, get_song_id, create_playlist
-
 from settings import SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SPOTIPY_CLIENT_ID
-
-import requests
-import spotipy
-#import spotipy.oauth2 as oauth2
-import oauth2
 
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 
+import requests
+import spotipy
+import oauth2
+
 app = Flask(__name__)
 app.secret_key = 'loPp;j:KJ;kj;KJKkK&&Nhjk!'
+
 
 @app.route("/", methods=['GET', 'POST'])
 def hello():
@@ -30,8 +29,6 @@ def hello():
                                        scope=None, cache_path=".cache-" + username)
 
         session['s'] = sp_oauth.serialize()
-        print("===s====",session['s'])
-        print("===S====", sp_oauth.cache_path)
 
         token_info = sp_oauth.get_cached_token()
 
@@ -47,27 +44,12 @@ def hello():
     return render_template('main.html')
 
 
-"""
-@app.route('/callback')
-def callback():
-    print("==========CALLBACK===========")
-    response = request.url
-
-    code = sp_oauth.parse_response_code(response)
-    token_info = sp_oauth.get_access_token(code)
-    token = token_info
-
-    #print(token_info)
-    return render_template('callback.html', token=token, response=response)
-"""
-
 def as_SpotifyOAuth(d):
     return oauth2.SpotifyOAuth(d['client_id'], d['client_secret'], d['redirect_uri'], cache_path=d['cache_path'])
 
+
 @app.route('/playlist', methods=['GET', 'POST'])
 def playlist():
-    print("==========PLAYLIST===========")
-
     if request.method == 'POST':
         sp_oauth = as_SpotifyOAuth(session['s'])
         username = session['username']
@@ -79,7 +61,6 @@ def playlist():
 
         if not token_info:
             flash('Token not cached')
-            print('++++++++++++TOKEN NOT CACHED+++++++++++++')
 
         if token_info:
             token = token_info['access_token']
@@ -87,13 +68,10 @@ def playlist():
             sp = spotipy.Spotify(auth=token)
             sp.trace = False
 
-            print("====sp====", sp.current_user())
-
             # create playlist with today's date in the name e.g. "Reddit's /r/Music songs of 2016-11-15"
             playlist_id = create_playlist(sp, username)  # returns playlist id
 
             # insert list of songs in playlist
-            print("SONGS---------------------", songs)
             add_songs_to_playlist(sp, username, playlist_id, songs)
 
             # success or error
@@ -117,12 +95,14 @@ def songs():
 
     return render_template('wait.html')
 
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     session.pop('user', None)
 
     return redirect('/')
+
 
 if __name__ == "__main__":
     app.run()
