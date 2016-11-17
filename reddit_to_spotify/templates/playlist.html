@@ -13,5 +13,11 @@
    {% endif %}
 {% endwith %}
 
+
+{% if playlist_id %}
+    Playlist created. <a href="https://play.spotify.com/user/{{ user }}/playlist/{{ playlist_id}}">SEE IT HERE</a>
+{% endif %}
+
+
 </body>
 </html>

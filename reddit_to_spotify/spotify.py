@@ -4,6 +4,7 @@ from spotipy import oauth2
 import spotipy
 
 
+
 def create_playlist(spotify_instance, username):
     """
     :param username: string, Spotify username
@@ -12,7 +13,7 @@ def create_playlist(spotify_instance, username):
     """
 
     if spotify_instance:
-        playlist_name = "Reddit's /r/Music songs of {}".format(time.strftime('%Y-%m-%d'))
+        playlist_name = "Reddit's /r/Music songs of {}".format(time.strftime('%Y-%m-%d %H:%M:%S'))
 
         print("Creating playlist '{}'...".format(playlist_name))
 

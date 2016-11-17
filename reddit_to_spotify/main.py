@@ -6,48 +6,49 @@ from settings import SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SPOTIPY_CLIENT
 import spotipy
 import spotipy.oauth2 as oauth2
 
-from flask import Flask, request, render_template, redirect, url_for, flash, session
+from flask import Flask, request, render_template, redirect, url_for, flash, session, g
 
 app = Flask(__name__)
 app.secret_key = 'loPp;j:KJ;kj;KJKkK&&Nhjk!'
 
 
-@app.route("/", methods=['POST', 'GET'])
+@app.route("/", methods=['GET', 'POST'])
 def hello():
+    if request.method == 'GET':
+        return render_template('main.html')
+
+
+"""
+@app.route('/callback')
+def callback():
+    print("==========CALLBACK===========")
+    response = request.url
+
+    code = sp_oauth.parse_response_code(response)
+    token_info = sp_oauth.get_access_token(code)
+    token = token_info
+
+    #print(token_info)
+    return render_template('callback.html', token=token, response=response)
+"""
+
+
+@app.route('/playlist', methods=['GET', 'POST'])
+def playlist():
+    print("==========PLAYLIST===========")
+
     if request.method == 'POST':
         username = request.form['username']
-
         session['username'] = username
 
-        ''' prompts the user to login if necessary and returns
-            the user token suitable for use with the spotipy.Spotify
-            constructor
+        songs = request.form.getlist('songs')
 
-            Parameters:
-             - username - the Spotify username
-             - scope - the desired scope of the request
-             - client_id - the client id of your app
-             - client_secret - the client secret of your app
-             - redirect_uri - the redirect URI of your app
-
-        '''
-
-        client_id = SPOTIPY_CLIENT_ID
-        client_secret = SPOTIPY_CLIENT_SECRET
-        redirect_uri = SPOTIPY_REDIRECT_URI
-
-        if not client_id or not client_secret or not redirect_uri:
+        if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET or not SPOTIPY_REDIRECT_URI:
             raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
-        global sp_oauth
-        sp_oauth = oauth2.SpotifyOAuth(client_id, client_secret, redirect_uri,
+        sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
                                        scope=None, cache_path=".cache-" + username)
 
-        # try to get a valid token for this user, from the cache,
-        # if not in the cache, the create a new (this will send
-        # the user to a web page where they can authorize this app)
-
-        global token_info
         token_info = sp_oauth.get_cached_token()
 
         if not token_info:
@@ -63,53 +64,41 @@ def hello():
 
             return redirect(auth_url)
 
-        else:
-            #print(token_info)
-            return redirect(url_for('playlist'))
+    response = request.args.get('code')
 
-    return render_template('main.html')
+    if response:
 
+        code = sp_oauth.parse_response_code(response)
+        token_info = sp_oauth.get_access_token(code)
 
-@app.route('/callback')
-def callback():
-    print("==========CALLBACK===========")
-    response = request.url
-
-    code = sp_oauth.parse_response_code(response)
-    token_info = sp_oauth.get_access_token(code)
-
-    print(token_info)
-    return redirect(url_for('playlist'))
-
-
-@app.route('/playlist')
-def playlist():
-    print("==========PLAYLIST===========")
     if token_info:
         token = token_info['access_token']
-        username = session['username']
 
         sp = spotipy.Spotify(auth=token)
         sp.trace = False
 
-        # create playlist with today's date in the name e.g. "Reddit's /r/Music songs of 2016-11-15" -- DONE : create_playlist()
+        # create playlist with today's date in the name e.g. "Reddit's /r/Music songs of 2016-11-15"
         playlist_id = create_playlist(sp, username)  # returns playlist id
-
-        songs = []
-        for song in get_top_20_songs():  # get top 20 songs on Reddit/r/Music
-            song_id = get_song_id(song)
-            if song_id is not None:
-                songs.append(song_id)
 
         # insert list of songs in playlist
         add_songs_to_playlist(sp, username, playlist_id, songs)
 
         # success or error
-        flash("Playlist created. https://play.spotify.com/user/{}/playlist/{}".format(username, playlist_id))
-        return render_template('playlist.html', user=username)
+
+        return render_template('playlist.html', user=username, playlist_id=playlist_id)
     else:
         flash("Token error.")
+        return render_template('playlist.html', user=username)
+
+
+@app.route('/songs', methods=['GET', 'POST'])
+def songs():
+    songs = get_top_20_songs()
+    return render_template('songs.html', songs=songs, song_id=get_song_id)
+
 
 
 if __name__ == "__main__":
     app.run()
+
+    # testing : 11158057035
