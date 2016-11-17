@@ -73,4 +73,4 @@ def get_song_id(song):
 
     except:
         print('*** Song not found. Skipping...')
-        return None
+        return 'None:{}'.format(" - ".join(song))

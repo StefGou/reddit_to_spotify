@@ -11,7 +11,22 @@
 
 
     {% if playlist_id %}
-        Playlist created. <a href="https://play.spotify.com/user/{{ user }}/playlist/{{ playlist_id}}">SEE IT HERE</a>
+        <div>
+            <span>Playlist created.</span>
+            <a href="https://play.spotify.com/user/{{ user }}/playlist/{{ playlist_id}}" target="_blank">SEE IT HERE.</a>
+        </div>
     {% endif %}
+
+    {% if exclusions %}
+        <div class="not_found">
+            <div class="not_found_title">Song(s) not found on Spotify:</div>
+            <ul>
+            {% for song in exclusions %}
+                <li class="playlist">{{ song }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
 
 {% endblock %}

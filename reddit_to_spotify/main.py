@@ -68,25 +68,12 @@ def as_SpotifyOAuth(d):
 def playlist():
     print("==========PLAYLIST===========")
 
-    code = request.args.get('code')
-
-    sp_oauth = as_SpotifyOAuth(session['s'])
-    print("====2====", sp_oauth.cache_path)
-    username = session['username']
-    # print(username)
-
-    if code:
-
-        token_info = sp_oauth.get_access_token(code)
-        print("=====tf====",token_info)
-        #sp_oauth._save_token_info(token_info)
-
-        songs = get_top_20_songs()
-        return render_template('songs.html', songs=songs, song_id=get_song_id)
-
     if request.method == 'POST':
+        sp_oauth = as_SpotifyOAuth(session['s'])
+        username = session['username']
 
-        songs = [song for song in request.form.getlist('songs') if song != 'None']
+        songs = [song for song in request.form.getlist('songs') if not song.startswith('None:')]
+        exclusions = [song.split('None:')[1] for song in request.form.getlist('songs') if song.startswith('None:')]
 
         token_info = sp_oauth.get_cached_token()
 
@@ -99,6 +86,7 @@ def playlist():
 
             sp = spotipy.Spotify(auth=token)
             sp.trace = False
+
             print("====sp====", sp.current_user())
 
             # create playlist with today's date in the name e.g. "Reddit's /r/Music songs of 2016-11-15"
@@ -110,21 +98,29 @@ def playlist():
 
             # success or error
 
-            return render_template('playlist.html', user=username, playlist_id=playlist_id)
+            return render_template('playlist.html', user=username, playlist_id=playlist_id, exclusions=exclusions)
         else:
             flash("Token error.")
             return render_template('playlist.html', user=username)
 
-
-@app.route('/songs', methods=['GET', 'POST'])
-def songs():
     songs = get_top_20_songs()
     return render_template('songs.html', songs=songs, song_id=get_song_id)
 
+
+@app.route('/songs', methods=['GET', 'POST'])
+def songs():
+    code = request.args.get('code')
+
+    if code:
+        sp_oauth = as_SpotifyOAuth(session['s'])
+        sp_oauth.get_access_token(code)
+
+    return render_template('wait.html')
+
 @app.route('/logout')
 def logout():
-    session.pop('username')
-    session.pop('user_pic')
+    session.pop('username', None)
+    session.pop('user', None)
 
     return redirect('/')
 

@@ -1,0 +1,7 @@
+{% extends "index.html" %}
+{% block body %}
+
+    <a href="{{ url_for('playlist') }}" onclick="loader.style.display = 'block'"><h1>Click here when you're ready</h1></a>
+    <div id="loader" style="display: none" class="loader">Please wait</div>
+
+{% endblock %}

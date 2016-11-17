@@ -3,11 +3,13 @@
 
     <form action="/playlist" method="post">
         {% for song in songs %}
-            <input type="checkbox" checked name="songs" value="{{ song_id(song) }}"> {{ song.title.split("[")[0].strip() }} ({{ song.ups }} upvotes)
-            <br>
+            <div class="playlist">
+                <input type="checkbox" checked name="songs" value="{{ song_id(song) }}">
+                <span class="playlist_track">{{ song.title.split("[")[0].strip() }} ({{ song.ups }} upvotes)</span>
+            </div>
         {% endfor %}
 
-        <input type="submit">
+        <input class="btn btn-default" type="submit" value="CREATE SPOTIFY PLAYLIST">
     </form>
 
 {% endblock %}
