@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <title>Test Reddit to Spotify</title>
-</head>
-<body>
+{% extends "index.html" %}
+{% block body %}
+
     {% with messages = get_flashed_messages() %}
        {% if messages %}
           {% for message in messages %}
@@ -14,11 +11,9 @@
 
 
     <form action="" method="post">
-            <input name="username">
+        <input class="form-control" name="username">
+        <input class="btn btn-default" type="submit">
+    </form>
 
-    <input type="submit">
-</form>
+{% endblock %}
 
-<a href="/songs">START</a>
-</body>
-</html>

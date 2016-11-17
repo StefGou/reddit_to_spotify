@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{% block body %}
+
+    <form action="/playlist" method="post">
+        {% for song in songs %}
+            <input type="checkbox" checked name="songs" value="{{ song_id(song) }}"> {{ song.title.split("[")[0].strip() }} ({{ song.ups }} upvotes)
+            <br>
+        {% endfor %}
+
+        <input type="submit">
+    </form>
+
+{% endblock %}

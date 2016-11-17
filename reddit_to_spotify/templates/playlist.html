@@ -1,23 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Playlist</title>
-</head>
-<body>
-{% with messages = get_flashed_messages() %}
-   {% if messages %}
-      {% for message in messages %}
-         {{ message }}
-      {% endfor %}
-   {% endif %}
-{% endwith %}
+{% extends "index.html" %}
+{% block body %}
+
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+          {% for message in messages %}
+             {{ message }}
+          {% endfor %}
+       {% endif %}
+    {% endwith %}
 
 
-{% if playlist_id %}
-    Playlist created. <a href="https://play.spotify.com/user/{{ user }}/playlist/{{ playlist_id}}">SEE IT HERE</a>
-{% endif %}
+    {% if playlist_id %}
+        Playlist created. <a href="https://play.spotify.com/user/{{ user }}/playlist/{{ playlist_id}}">SEE IT HERE</a>
+    {% endif %}
 
-
-</body>
-</html>
+{% endblock %}
