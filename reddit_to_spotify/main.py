@@ -3,21 +3,25 @@ from spotify import add_songs_to_playlist, get_song_id, create_playlist
 
 from settings import SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SPOTIPY_CLIENT_ID
 
+import requests
 import spotipy
 #import spotipy.oauth2 as oauth2
 import oauth2
 
-from flask import Flask, request, render_template, redirect, url_for, flash, session, g
+from flask import Flask, request, render_template, redirect, url_for, flash, session
 
 app = Flask(__name__)
 app.secret_key = 'loPp;j:KJ;kj;KJKkK&&Nhjk!'
-
 
 @app.route("/", methods=['GET', 'POST'])
 def hello():
     if request.method == 'POST':
         username = request.form['username']
         session['username'] = username
+
+        url = 'https://api.spotify.com/v1/users/{}'.format(username)
+        response = requests.get(url).json()
+        session['user'] = response
 
         if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET or not SPOTIPY_REDIRECT_URI:
             raise spotipy.SpotifyException(550, -1, 'no credentials set')
@@ -95,7 +99,7 @@ def playlist():
 
             sp = spotipy.Spotify(auth=token)
             sp.trace = False
-            print("====sp====", sp)
+            print("====sp====", sp.current_user())
 
             # create playlist with today's date in the name e.g. "Reddit's /r/Music songs of 2016-11-15"
             playlist_id = create_playlist(sp, username)  # returns playlist id
@@ -117,7 +121,12 @@ def songs():
     songs = get_top_20_songs()
     return render_template('songs.html', songs=songs, song_id=get_song_id)
 
+@app.route('/logout')
+def logout():
+    session.pop('username')
+    session.pop('user_pic')
 
+    return redirect('/')
 
 if __name__ == "__main__":
     app.run()
