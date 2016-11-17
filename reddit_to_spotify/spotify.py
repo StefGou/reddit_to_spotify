@@ -39,7 +39,7 @@ def add_songs_to_playlist(spotify_instance, username, playlist_id, track_ids):
     if spotify_instance:
         print("Adding songs to playlist...")
 
-        results = spotify_instance.user_playlist_add_tracks(username, playlist_id, track_ids)
+        spotify_instance.user_playlist_add_tracks(username, playlist_id, track_ids)
 
         return True
 
