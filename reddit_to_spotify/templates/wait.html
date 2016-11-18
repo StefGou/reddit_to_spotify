@@ -1,7 +1,22 @@
 {% extends "index.html" %}
 {% block body %}
 
-    <a href="{{ url_for('playlist') }}" onclick="loader.style.display = 'block'"><h1>Click here when you're ready</h1></a>
+    <div>
+        <form action="/songs" method="post">
+            <div class="form-group">
+                <label for="song_num">How many songs do you want?</label>
+                <select id="song_num" name="song_num" class="custom-select">
+
+                {% for i in range(5, 51, 5) %}
+                    <option value="{{ i }}">{{ i }}</option>
+                {% endfor %}
+
+                </select>
+            </div>
+            <button class="btn btn-default" type="submit" onclick="loader.style.display = 'block'">LET'S GO</button>
+        </form>
+    </div>
+
     <div id="loader" style="display: none" class="loader">Please wait</div>
 
 {% endblock %}

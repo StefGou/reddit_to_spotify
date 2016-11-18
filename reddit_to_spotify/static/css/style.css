@@ -58,6 +58,9 @@ h1,h2,h3,h4,h5,h6{
 p{
 	margin:0;
 }
+select {
+   color: #1b304a;
+}
 .not_found{
     padding: 1em;
     margin-top: 1.5em;

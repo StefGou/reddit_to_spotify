@@ -1,4 +1,4 @@
-from reddit import get_top_20_songs
+from reddit import get_top_songs_week
 from spotify import add_songs_to_playlist, get_song_id, create_playlist
 from settings import SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SPOTIPY_CLIENT_ID
 
@@ -27,7 +27,7 @@ def hello():
             raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
         sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
-                                       scope=None, cache_path=".cache-" + session['username'])
+                                       scope=None, cache_path="cache/.cache-" + session['username'])
 
         session['s'] = sp_oauth.serialize()
 
@@ -82,12 +82,19 @@ def playlist():
             flash("Token error.")
             return render_template('playlist.html', user=username)
 
-    songs = get_top_20_songs()
-    return render_template('songs.html', songs=songs, song_id=get_song_id)
+    return redirect(url_for('songs'))
 
 
 @app.route('/songs', methods=['GET', 'POST'])
 def songs():
+    if request.method == 'POST':
+
+        song_num = request.form.get('song_num')
+
+        songs = get_top_songs_week(int(song_num))
+
+        return render_template('songs.html', songs=songs, song_id=get_song_id, song_num=song_num)
+
     code = request.args.get('code')
 
     if code:
@@ -105,6 +112,12 @@ def logout():
         session.pop('user', None)
 
     return redirect('/')
+
+
+#to test html and jinga
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 
 if __name__ == "__main__":

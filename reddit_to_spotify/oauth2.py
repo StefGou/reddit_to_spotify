@@ -79,6 +79,7 @@ class SpotifyOAuth(object):
     def _save_token_info(self, token_info):
         if self.cache_path:
             try:
+                os.makedirs(os.path.dirname(self.cache_path), exist_ok=True)
                 f = open(self.cache_path, 'w')
                 f.write(json.dumps(token_info))
                 f.close()
