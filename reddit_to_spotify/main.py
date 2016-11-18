@@ -18,7 +18,8 @@ def hello():
         username = request.form['username']
         session['username'] = username
 
-        url = 'https://api.spotify.com/v1/users/{}'.format(username)
+    if session.get('username'):
+        url = 'https://api.spotify.com/v1/users/{}'.format(session['username'])
         response = requests.get(url).json()
         session['user'] = response
 
@@ -26,7 +27,7 @@ def hello():
             raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
         sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
-                                       scope=None, cache_path=".cache-" + username)
+                                       scope=None, cache_path=".cache-" + session['username'])
 
         session['s'] = sp_oauth.serialize()
 
@@ -98,8 +99,10 @@ def songs():
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
-    session.pop('user', None)
+    if session.get('username'):
+        session.pop('username', None)
+    if session.get('user'):
+        session.pop('user', None)
 
     return redirect('/')
 

@@ -9,11 +9,26 @@
        {% endif %}
     {% endwith %}
 
+    <div>
+        <form action="" method="post" class="form-inline">
+            <input class="form-control" id="username" name="username" placeholder="Spotify username">
+            <input class="btn btn-default" type="submit">
+        </form>
+    </div>
+    <div class="find_username_link">
+        <a href="#" onclick="find_username_text.style.display = 'block'">Where is my username?</a>
+    </div>
+    <div id="find_username_text" class="find_username_text">
+        <h2>Finding your Spotify username can be tricky.</h2>
 
-    <form action="" method="post">
-        <input class="form-control" name="username">
-        <input class="btn btn-default" type="submit">
-    </form>
-
+        <ul>
+            <li>Go to <a href="https://play.spotify.com/collection" target="_blank" class="text-danger">https://play.spotify.com/collection</a></li>
+            <li>Wait until it redirects to your playlist page.</li>
+            <li>Now, look at the URL.</li>
+            <li>Your username is just after the <code>/user/</code> part.</li>
+            <li>Your username could be numbers if you registered with Facebook.</li>
+            <li><code>https://play.spotify.com/user/your_user_name_or_numbers/playlist/abc123</code></li>
+        </ul>
+    </div>
 {% endblock %}
 

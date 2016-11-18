@@ -53,8 +53,8 @@ a:hover{
 }
 
 h1,h2,h3,h4,h5,h6{
-	margin:0;	
-}	
+	margin:0;
+}
 p{
 	margin:0;
 }
@@ -67,6 +67,20 @@ p{
     margin-bottom: 1.5em;
     text-decoration: underline;
     font-weight: bold;
+}
+.find_username_text{
+	display: none;
+    margin-top: 0.5em;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 1em;
+}
+.find_username_text li {
+    list-style-type: circle;
+    list-style-position: inside;
+    font-size: small;
+}
+.find_username_link{
+	margin-top: 0.5em;
 }
 .playlist {
     margin-bottom: 1.5em;
@@ -181,6 +195,12 @@ p{
 	margin-top:1em;
 	padding-top:1em;
 	border-top:1px solid rgba(255, 255, 255, 0.26);
+}
+.media h2 {
+    color: #fff;
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 1em;
 }
 .tweet{
 	width:33.3%;
@@ -338,7 +358,7 @@ color:#fff;
 /*-- w3layouts --*/
 @media (max-width: 1050px){
 	.audio-record-list {
-	  width:46%;
+	  width:50%;
 	}
 }
 @media (max-width: 1024px){

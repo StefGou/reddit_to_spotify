@@ -28,7 +28,6 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	<div class="profile">
 			 <div class="profile-top wthree">
 				 <div class="pic-sec">
-
                      {% if session['user'] %}
                         <div class="pic">
                              <img src="{{ session['user']['images'][0]['url'] }}" alt=""/>
@@ -43,74 +42,30 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                              <img src="../static/images/default-user.png" alt=""/>
                          </div>
                          <div class="pic_info">
-                             <h2>Enter your Spotify username to start.</h2>
-                             <h3>To find your username... bla bla...</h3>
+                             <h2>Reddit to Spotify turns into a playlist the top 20 songs submitted in Reddit's '<a href="https://www.reddit.com/r/Music/" target="_blank">r/Music</a>'.</h2>
+                             <h3>Please enter your Spotify username to continue.</h3>
                          </div>
                          <div class="clear"></div>
                      {% endif %}
 				 </div>
 				 <div class="media">
-					 <!--
-                     <div class="tweet">
-						 <h4>2,501</h4>
-						 <h5>Tweets</h5>
-					 </div>
-					 <div class="follow">
-						 <h4>158</h4>
-						 <h5>Following</h5>
-					 </div>
-					 <div class="follow2">
-						  <h4>25,850</h4>
-						 <h5>Followers</h5>
-					 </div>
-					 <div class="clear"></div>
-					 -->
+
                      {% block body %}{% endblock %}
+
 				 </div>
 			 </div>
+        {% if session['user'] %}
+            <div class="text-center">
+                <a href="/logout" class="text-danger">
+                    <span>LOGOUT</span> <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+                </a>
+            </div>
+        {% endif %}
 		 </div>
-        <!--
-					<div id="jquery_jplayer_1" class="jp-jplayer"></div>
-						<div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
-							<div class="jp-type-playlist">
-								<div class="jp-gui jp-interface">
-									<div class="jp-controls">	
-										<button class="jp-play" role="button" tabindex="0">play</button>
-									</div>
-									<div class="jp-progress">
-										<div class="jp-seek-bar">
-											<div class="jp-play-bar"></div>
-										</div>
-									</div>
-									<div class="jp-volume-controls">
-										<button class="jp-mute" role="button" tabindex="0">mute</button>
-										<button class="jp-volume-max" role="button" tabindex="0">max volume</button>
-										<div class="jp-volume-bar">
-											<div class="jp-volume-bar-value"></div>
-										</div>
-									</div>
-									<div class="jp-time-holder">
-										<div class="jp-current-time" role="timer" aria-label="time">&nbsp;</div>
-										<div class="jp-duration" role="timer" aria-label="duration">&nbsp;</div>
-									</div>
-									
-								</div>
-								<div class="jp-playlist">
-									<ul>
-										<li>&nbsp;</li>
-									</ul>
-								</div>
-								<div class="jp-no-solution">
-									<span>Update Required</span>
-									To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
-								</div>
-							</div>
-						</div>
-						-->
 	</div>
 	<div class="footer agile">
 		<div class="copy-right">
-			<p> &copy; 2016 Music Profile Widget. All Rights Reserved | Design by  <a href="http://w3layouts.com/"> W3layouts</a></p>
+			<p> &copy; 2016 All Rights Reserved | Design by  <a href="http://w3layouts.com/"> W3layouts</a></p>
 		</div>
 	</div>
 </div>
