@@ -27,7 +27,7 @@ def hello():
             raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
         sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
-                                       scope=None, cache_path="cache/.cache-" + session['username'])
+                                       scope='playlist-modify', cache_path="cache/.cache-" + session['username'])
 
         session['s'] = sp_oauth.serialize()
 
@@ -46,7 +46,7 @@ def hello():
 
 
 def as_SpotifyOAuth(d):
-    return oauth2.SpotifyOAuth(d['client_id'], d['client_secret'], d['redirect_uri'], cache_path=d['cache_path'])
+    return oauth2.SpotifyOAuth(d['client_id'], d['client_secret'], d['redirect_uri'], cache_path=d['cache_path'], scope=d['scope'])
 
 
 @app.route('/playlist', methods=['GET', 'POST'])
@@ -120,7 +120,7 @@ def test():
     return render_template('test.html')
 
 
-if __name__ == "__main__":
-    app.run()
+#if __name__ == "__main__":
+#    app.run()
 
     # testing : 11158057035

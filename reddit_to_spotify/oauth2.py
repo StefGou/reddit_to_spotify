@@ -51,7 +51,8 @@ class SpotifyOAuth(object):
             'client_id': self.client_id,
             'cache_path': self.cache_path,
             'client_secret': self.client_secret,
-            'redirect_uri': self.redirect_uri
+            'redirect_uri': self.redirect_uri,
+            'scope': self.scope
         }
 
     def get_cached_token(self):
