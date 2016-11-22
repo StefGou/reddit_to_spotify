@@ -1,14 +1,31 @@
 {% extends "index.html" %}
 {% block body %}
     <h2>Here's your top {{ song_num }}!</h2>
+    <h4>Uncheck songs to remove them from the playlist.</h4>
 
     <form action="/playlist" method="post">
-        {% for song in songs %}
-            <div class="playlist">
-                <input type="checkbox" checked name="songs" value="{{ song_id(song) }}">
-                <span class="playlist_track">{{ song.title.split("[")[0].strip() }} ({{ song.ups }} upvotes)</span>
-            </div>
-        {% endfor %}
+
+        <div id="plwrap">
+            <ul id="plList">
+                {% for song in songs %}
+
+                    <li>
+                        <div class="plItem">
+                            <div class="plNum">
+                                <input type="checkbox" checked name="songs" value="{{ song_id(song) }}">
+                            </div>
+                            <div class="plTitle">
+                                {{ song.title.split("[")[0].strip() }}
+                            </div>
+                            <div class="plLength">
+                                {{ song.ups }} upvotes
+                            </div>
+                        </div>
+                    </li>
+
+                {% endfor %}
+            </ul>
+        </div>
 
         <button class="btn btn-default" type="submit">CREATE YOUR SPOTIFY PLAYLIST</button>
     </form>

@@ -10,6 +10,7 @@ import oauth2
 
 app = Flask(__name__)
 app.secret_key = 'loPp;j:KJ;kj;KJKkK&&Nhjk!'
+app.debug = True
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -120,7 +121,7 @@ def test():
     return render_template('test.html')
 
 
-#if __name__ == "__main__":
-#    app.run()
+if __name__ == "__main__":
+    app.run(debug=True)
 
     # testing : 11158057035

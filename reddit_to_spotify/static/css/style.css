@@ -271,7 +271,7 @@ select {
 /*-- main --*/
 .audio-record-list {
 margin:0 auto;
-width: 30%;
+width: 700px;
 }
 .audio-main {
 padding:6em 0 2em 0;
@@ -322,9 +322,6 @@ color:#fff;
 .audio-main h1 {
   margin-bottom: 75px;
 }
-	.audio-record-list {
-	  width: 33%;
-	}
 }
 @media (max-width: 1366px){
 	.audio-main {
@@ -335,14 +332,8 @@ color:#fff;
 .audio-main h1 {
   margin-bottom: 40px;
 }
-	.audio-record-list {
-	  width: 34%;
-	}
 }
 @media (max-width: 1200px){
-	.audio-record-list {
-	  width: 34%;
-	}
 	.audio-main h1 {
 	  font-size: 47px;
 	}
@@ -351,18 +342,12 @@ color:#fff;
 	.audio-main {
 	  padding: 5em 0 2em 0;
 	}
-	.audio-record-list {
-	  width: 40%;
-	}
 	.audio-main h1 {
 	  font-size: 45px;
 	}
 }
 /*-- w3layouts --*/
 @media (max-width: 1050px){
-	.audio-record-list {
-	  width:50%;
-	}
 }
 @media (max-width: 1024px){
 	.audio-main p {
@@ -386,7 +371,7 @@ color:#fff;
 }
 @media (max-width: 800px){
 	.audio-record-list {
-	  width: 56%;
+	  width: 80%;
 	}
 }
 @media (max-width: 768px){
@@ -397,17 +382,14 @@ color:#fff;
 }
 @media (max-width: 736px){
 	.audio-record-list {
-	  width:55%;
+	  width:75%;
 	}
 }
 @media (max-width: 667px){
-	.audio-record-list {
-	  width: 64%;
-	}
 }
 @media (max-width: 640px){
 	.audio-record-list {
-	  width: 68%;
+	  width: 80%;
 	}
 }
 /*-- agileits --*/
@@ -500,3 +482,25 @@ color:#fff;
 }
 }
 /*-- //responsive media queries --*/
+
+/* PLAYLIST */
+/* CSS Transitions */
+* {
+-moz-transition:all 100ms ease;
+-o-transition:all 100ms ease;
+-webkit-transition:all 100ms ease;
+transition:all 100ms ease;
+}
+
+/* Audio Player Styles
+================================================== */
+
+/* Default / Desktop / Firefox */
+#plwrap { margin:0 auto; }
+#plList { margin:0; }
+#plList li { cursor:pointer; margin:0; padding:21px 0; }
+#plList li:hover { background-color: rgba(255,255,255,0.2); }
+.plItem { position:relative; }
+.plTitle { left:50px; overflow:hidden; position:absolute; right:131px; text-overflow:ellipsis; top:0; white-space:nowrap; }
+.plNum { padding-left:21px; width:25px; }
+.plLength { width: 110px; padding-left:5px; position:absolute; right:21px; top:0; text-align: right; }
