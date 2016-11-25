@@ -161,6 +161,12 @@ select {
     box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
   }
 }
+.login-spotify {
+    text-align: center;
+}
+.login-spotify img {
+    max-width: 70%;
+}
 .profile-top {
     background: rgba(35, 59, 88, 0.71);
     padding: 1.5em;
