@@ -14,12 +14,12 @@ app.debug = True
 
 
 @app.route("/", methods=['GET', 'POST'])
+def home():
+    return render_template('main.html')
+
+
+@app.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
-
-
-@app.route("/hello", methods=['GET', 'POST'])
-def hello():
     if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET or not SPOTIPY_REDIRECT_URI:
         raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
@@ -39,9 +39,6 @@ def hello():
     else:
         return redirect(url_for('songs'))
 
-    return render_template('main.html')
-
-
 def as_SpotifyOAuth(d):
     return oauth2.SpotifyOAuth(d['client_id'], d['client_secret'], d['redirect_uri'], cache_path=d['cache_path'],
                                scope=d['scope'])
@@ -51,7 +48,7 @@ def as_SpotifyOAuth(d):
 def playlist():
     if request.method == 'POST':
         sp_oauth = as_SpotifyOAuth(session['s'])
-        username = session['username']
+        username = session['user']['id']
 
         songs = [song for song in request.form.getlist('songs') if not song.startswith('None:')]
         exclusions = [song.split('None:')[1] for song in request.form.getlist('songs') if song.startswith('None:')]
@@ -103,9 +100,10 @@ def songs():
 
         sp = spotipy.Spotify(auth=access_token)
 
-        me = sp.me()
+        session['user'] = sp.me()
 
-        sp_oauth.cache_path = 'cache/.cache-{}'.format(me['id'])
+        sp_oauth.cache_path = 'cache/.cache-{}'.format(session['user']['id'])
+        session['s']['cache_path'] = 'cache/.cache-{}'.format(session['user']['id'])
         sp_oauth._save_token_info(token)
 
     return render_template('wait.html')
