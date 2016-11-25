@@ -13,6 +13,11 @@ app.secret_key = 'loPp;j:KJ;kj;KJKkK&&Nhjk!'
 app.debug = True
 
 
+def as_SpotifyOAuth(d):
+    return oauth2.SpotifyOAuth(d['client_id'], d['client_secret'], d['redirect_uri'], cache_path=d['cache_path'],
+                               scope=d['scope'])
+
+
 @app.route("/", methods=['GET', 'POST'])
 def home():
     return render_template('main.html')
@@ -38,10 +43,6 @@ def login():
 
     else:
         return redirect(url_for('songs'))
-
-def as_SpotifyOAuth(d):
-    return oauth2.SpotifyOAuth(d['client_id'], d['client_secret'], d['redirect_uri'], cache_path=d['cache_path'],
-                               scope=d['scope'])
 
 
 @app.route('/playlist', methods=['GET', 'POST'])
@@ -70,9 +71,8 @@ def playlist():
             # insert list of songs in playlist
             add_songs_to_playlist(sp, username, playlist_id, songs)
 
-            # success or error
-
             return render_template('playlist.html', user=username, playlist_id=playlist_id, exclusions=exclusions)
+
         else:
             flash("Token error.")
             return render_template('playlist.html', user=username)
