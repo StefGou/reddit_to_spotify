@@ -14,40 +14,37 @@ app.debug = True
 
 
 @app.route("/", methods=['GET', 'POST'])
+def login():
+    return render_template('login.html')
+
+
+@app.route("/hello", methods=['GET', 'POST'])
 def hello():
-    if request.method == 'POST':
-        username = request.form['username']
-        session['username'] = username
+    if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET or not SPOTIPY_REDIRECT_URI:
+        raise spotipy.SpotifyException(550, -1, 'no credentials set')
 
-    if session.get('username'):
-        url = 'https://api.spotify.com/v1/users/{}'.format(session['username'])
-        response = requests.get(url).json()
-        session['user'] = response
+    sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
+                                   scope='playlist-modify')
 
-        if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET or not SPOTIPY_REDIRECT_URI:
-            raise spotipy.SpotifyException(550, -1, 'no credentials set')
+    session['s'] = sp_oauth.serialize()
 
-        sp_oauth = oauth2.SpotifyOAuth(SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI,
-                                       scope='playlist-modify', cache_path="cache/.cache-" + session['username'])
+    token_info = sp_oauth.get_cached_token()
 
-        session['s'] = sp_oauth.serialize()
+    if not token_info:
 
-        token_info = sp_oauth.get_cached_token()
+        auth_url = sp_oauth.get_authorize_url()
 
-        if not token_info:
+        return redirect(auth_url)
 
-            auth_url = sp_oauth.get_authorize_url()
-
-            return redirect(auth_url)
-
-        else:
-            return redirect(url_for('songs'))
+    else:
+        return redirect(url_for('songs'))
 
     return render_template('main.html')
 
 
 def as_SpotifyOAuth(d):
-    return oauth2.SpotifyOAuth(d['client_id'], d['client_secret'], d['redirect_uri'], cache_path=d['cache_path'], scope=d['scope'])
+    return oauth2.SpotifyOAuth(d['client_id'], d['client_secret'], d['redirect_uri'], cache_path=d['cache_path'],
+                               scope=d['scope'])
 
 
 @app.route('/playlist', methods=['GET', 'POST'])
@@ -89,7 +86,6 @@ def playlist():
 @app.route('/songs', methods=['GET', 'POST'])
 def songs():
     if request.method == 'POST':
-
         song_num = request.form.get('song_num')
 
         songs = get_top_songs_week(int(song_num))
@@ -100,7 +96,17 @@ def songs():
 
     if code:
         sp_oauth = as_SpotifyOAuth(session['s'])
-        sp_oauth.get_access_token(code)
+
+        token = sp_oauth.get_access_token(code)
+
+        access_token = token['access_token']
+
+        sp = spotipy.Spotify(auth=access_token)
+
+        me = sp.me()
+
+        sp_oauth.cache_path = 'cache/.cache-{}'.format(me['id'])
+        sp_oauth._save_token_info(token)
 
     return render_template('wait.html')
 
@@ -115,7 +121,7 @@ def logout():
     return redirect('/')
 
 
-#to test html and jinga
+# to test html and jinga
 @app.route('/test')
 def test():
     return render_template('test.html')
