@@ -4,7 +4,6 @@ from settings import SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI, SPOTIPY_CLIENT
 
 from flask import Flask, request, render_template, redirect, url_for, flash, session
 
-import requests
 import spotipy
 import oauth2
 
@@ -119,13 +118,5 @@ def logout():
     return redirect('/')
 
 
-# to test html and jinga
-@app.route('/test')
-def test():
-    return render_template('test.html')
-
-
 if __name__ == "__main__":
     app.run(debug=True)
-
-    # testing : 11158057035
